@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makercoins</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Maker Coins</h1>
+
+        <!-- Seção para selecionar a turma -->
+        <div class="tabs">
+            <button class="tab-button" onclick="showLeaderboard('5A')">5°A</button>
+            <button class="tab-button" onclick="showLeaderboard('5B')">5°B</button>
+            <button class="tab-button" onclick="showLeaderboard('5C')">5°C</button>
+        </div>
+
+        <!-- Exibição dos dados -->
+        <div id="leaderboard"></div>
+    </div>
+
+    <script>
+        // Função para exibir o leaderboard de uma turma selecionada
+        function showLeaderboard(className) {
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.innerHTML = ''; // Limpa os dados anteriores
+
+            // Percorre o LocalStorage e exibe os dados da turma selecionada
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith(className)) { // Verifica se a chave começa com o nome da turma
+                    const name = key.split('_')[1]; // Extrai o nome do aluno
+                    const coins = localStorage.getItem(key);
+                    const userCard = `
+                        <div class="user-card">
+                            <p class="user-name">${name}</p>
+                            <p class="user-coins">Coins: ${coins}</p>
+                        </div>
+                    `;
+                    leaderboard.innerHTML += userCard;
+                }
+            }
+        }
+
+        // Exibir leaderboard de uma turma por padrão (opcional)
+        showLeaderboard('5A'); // Exemplo: Exibir leaderboard da turma 5°A ao carregar a página
+    </script>
+</body>
+
+</html>

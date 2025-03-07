@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inicial</title>
+    <link rel="stylesheet" href="style3.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Bem-vindo ao Sistema Maker Coins</h1>
+
+        <div class="button-container">
+            <!-- Botão para acessar a página Maker Coins -->
+            <button onclick="window.location.href='frontend.html'">Ir para Maker Coins</button>
+
+            <!-- Botão para acessar a página de Atualização com autenticação -->
+            <button onclick="authenticate()">Ir para Atualização</button>
+        </div>
+    </div>
+
+    <script>
+        function authenticate() {
+            const password = prompt('Digite a senha para acessar a página de atualização:');
+            const correctPassword = 'Scorpions4400'; // Altere para sua senha real
+
+            if (password === correctPassword) {
+                window.location.href = 'Atualização.html';
+            } else {
+                alert('Senha incorreta. Acesso negado.');
+            }
+        }
+    </script>
+</body>
+
+</html>

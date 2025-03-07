@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Coins - Maker Coin System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Atualizar Coins</h1>
+
+        <!-- Seção para escolher a turma -->
+        <div class="tabs">
+            <button class="tab-button" onclick="setClass('5A')">5°A</button>
+            <button class="tab-button" onclick="setClass('5B')">5°B</button>
+            <button class="tab-button" onclick="setClass('5C')">5°C</button>
+        </div>
+
+        <!-- Seção de entrada para o nome e quantidade de coins -->
+        <div class="input-section">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" placeholder="Digite o nome">
+            <label for="coins">Coins:</label>
+            <input type="number" id="coins" placeholder="Digite a quantidade">
+            <button onclick="saveData()">Salvar</button>
+            <button onclick="window.location.href='frontend.html'">Ver Leaderboard</button>
+        </div>
+
+        <p id="alert" class="alert"></p>
+
+        <!-- Lista de dados salvos -->
+        <h2>Dados Salvos:</h2>
+        <div id="savedData"></div>
+    </div>
+
+    <script>
+        let selectedClass = ''; // Variável para armazenar a turma selecionada
+
+        // Função para definir a turma selecionada
+        function setClass(className) {
+            selectedClass = className;
+            document.getElementById('alert').textContent = `Turma selecionada: ${className}`;
+            displaySavedData(); // Atualiza os dados salvos quando a turma for alterada
+        }
+
+        // Função para salvar os dados no LocalStorage
+        function saveData() {
+            const name = document.getElementById('name').value;
+            const coins = document.getElementById('coins').value;
+
+            if (name && coins && selectedClass) {
+                // Armazenando os dados com base na turma selecionada
+                localStorage.setItem(`${selectedClass}_${name}`, coins);
+                alert('Dados salvos!');
+                document.getElementById('name').value = '';
+                document.getElementById('coins').value = '';
+                document.getElementById('alert').textContent = ''; // Limpa o alerta
+                displaySavedData(); // Atualiza a lista de dados salvos
+            } else {
+                alert('Por favor, preencha todos os campos e selecione uma turma.');
+            }
+        }
+
+        // Função para exibir os dados salvos na turma selecionada
+        function displaySavedData() {
+            const savedDataContainer = document.getElementById('savedData');
+            savedDataContainer.innerHTML = ''; // Limpa os dados anteriores
+
+            // Verifica as chaves no localStorage para a turma selecionada
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith(selectedClass)) { // Verifica se a chave começa com o nome da turma
+                    const name = key.split('_')[1]; // Extrai o nome do aluno
+                    const coins = localStorage.getItem(key);
+
+                    // Exibe o nome do aluno e a quantidade de coins, com um botão de exclusão
+                    const userCard = `
+                        <div class="user-card">
+                            <p class="user-name">${name}</p>
+                            <p class="user-coins">Coins: ${coins}</p>
+                            <button onclick="deleteData('${key}')">Excluir</button>
+                        </div>
+                    `;
+                    savedDataContainer.innerHTML += userCard;
+                }
+            }
+        }
+
+        // Função para excluir dados
+        function deleteData(key) {
+            if (confirm('Tem certeza que deseja excluir este dado?')) {
+                localStorage.removeItem(key); // Exclui o item do localStorage
+                alert('Dados excluídos!');
+                displaySavedData(); // Atualiza a lista de dados salvos
+            }
+        }
+    </script>
+</body>
+</html>
