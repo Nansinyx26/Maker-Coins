@@ -41,7 +41,4 @@ O **Maker Coin System** é um sistema simples baseado em HTML, CSS e JavaScript 
 
 Sinta-se à vontade para sugerir melhorias ou adaptar o projeto conforme necessário. Este sistema foi criado para ser simples, mas pode crescer com novas funcionalidades!
 
----
-
-Qualquer ajuste ou adição, é só falar! 🚀
 
