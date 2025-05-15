@@ -5,8 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atualizar Coins - Maker Coin System</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        #sala-info {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: #34495e;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            color: #ecf0f1;
+            font-size: 1rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        #export-button {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: #1abc9c;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 1000;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #export-button:hover {
+            background: #16a085;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
+    <!-- Contador no topo direito -->
+    <div id="sala-info">
+        <span id="contador-nomes">Nomes: 0</span>
+        <span id="contador-coins">Coins: 0</span>
+    </div>
+
     <div class="container">
         <h1>Atualizar Coins</h1>
 
@@ -21,7 +64,7 @@
         <div class="input-section">
             <label for="name">Nome:</label>
             <input type="text" id="name" placeholder="Digite o nome">
-            <label for="coins">Coins:</label>
+            <label for="coins">Coins (positivo ou negativo):</label>
             <input type="number" id="coins" placeholder="Digite a quantidade">
             <button onclick="saveData()">Salvar</button>
             <button onclick="window.location.href='frontend.html'">Ver Leaderboard</button>
@@ -32,49 +75,57 @@
         <!-- Lista de dados salvos -->
         <h2>Dados Salvos:</h2>
         <div id="savedData"></div>
-    </div>
+
+        <!-- Botão de exportação -->
+        <button id="export-button" onclick="exportToTXT()">Exportar TXT</button>
+  </div>
 
     <script>
-        let selectedClass = ''; // Variável para armazenar a turma selecionada
+        let selectedClass = '';
 
-        // Função para definir a turma selecionada
         function setClass(className) {
             selectedClass = className;
             document.getElementById('alert').textContent = `Turma selecionada: ${className}`;
-            displaySavedData(); // Atualiza os dados salvos quando a turma for alterada
+            displaySavedData();
         }
 
-        // Função para salvar os dados no LocalStorage
         function saveData() {
-            const name = document.getElementById('name').value;
+            const nameInput = document.getElementById('name').value.trim();
+            const name = nameInput.charAt(0).toUpperCase() + nameInput.slice(1).toLowerCase();
             const coins = document.getElementById('coins').value;
 
             if (name && coins && selectedClass) {
-                // Armazenando os dados com base na turma selecionada
-                localStorage.setItem(`${selectedClass}_${name}`, coins);
+                const key = `${selectedClass}_${name}`;
+                const valorAtual = parseInt(localStorage.getItem(key)) || 0;
+                const novoValor = valorAtual + parseInt(coins);
+
+                localStorage.setItem(key, novoValor);
+
                 alert('Dados salvos!');
                 document.getElementById('name').value = '';
                 document.getElementById('coins').value = '';
-                document.getElementById('alert').textContent = ''; // Limpa o alerta
-                displaySavedData(); // Atualiza a lista de dados salvos
+                document.getElementById('alert').textContent = '';
+                displaySavedData();
             } else {
                 alert('Por favor, preencha todos os campos e selecione uma turma.');
             }
         }
 
-        // Função para exibir os dados salvos na turma selecionada
         function displaySavedData() {
             const savedDataContainer = document.getElementById('savedData');
-            savedDataContainer.innerHTML = ''; // Limpa os dados anteriores
+            savedDataContainer.innerHTML = '';
 
-            // Verifica as chaves no localStorage para a turma selecionada
+            let totalNomes = 0;
+            let totalCoins = 0;
+
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key.startsWith(selectedClass)) { // Verifica se a chave começa com o nome da turma
-                    const name = key.split('_')[1]; // Extrai o nome do aluno
-                    const coins = localStorage.getItem(key);
+                if (key.startsWith(selectedClass)) {
+                    const name = key.split('_')[1];
+                    const coins = parseInt(localStorage.getItem(key)) || 0;
+                    totalNomes++;
+                    totalCoins += coins;
 
-                    // Exibe o nome do aluno e a quantidade de coins, com um botão de exclusão
                     const userCard = `
                         <div class="user-card">
                             <p class="user-name">${name}</p>
@@ -85,16 +136,47 @@
                     savedDataContainer.innerHTML += userCard;
                 }
             }
+
+            // Atualizar contador no topo
+            document.getElementById('contador-nomes').textContent = `Nomes: ${totalNomes}`;
+            document.getElementById('contador-coins').textContent = `Coins: ${totalCoins}`;
         }
 
-        // Função para excluir dados
         function deleteData(key) {
             if (confirm('Tem certeza que deseja excluir este dado?')) {
-                localStorage.removeItem(key); // Exclui o item do localStorage
+                localStorage.removeItem(key);
                 alert('Dados excluídos!');
-                displaySavedData(); // Atualiza a lista de dados salvos
+                displaySavedData();
             }
         }
+
+        function exportToTXT() {
+    if (!selectedClass) {
+        alert("Selecione uma turma antes de exportar.");
+        return;
+    }
+
+    let txt = "Nome\tCoins\n";
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith(selectedClass)) {
+            const name = key.split('_')[1];
+            const coins = localStorage.getItem(key);
+            txt += `${name}\t${coins}\n`;
+        }
+    }
+
+    const blob = new Blob([txt], { type: "text/plain;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.setAttribute("href", URL.createObjectURL(blob));
+    link.setAttribute("download", `turma_${selectedClass}.txt`);
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
     </script>
 </body>
 </html>
