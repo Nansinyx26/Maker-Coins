@@ -6,9 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Makercoins</title>
     <link rel="stylesheet" href="style1.css">
+    <style>
+        #sala-info {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: #34495e;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            color: #ecf0f1;
+            font-size: 1rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Contador no topo direito -->
+    <div id="sala-info">
+        <span id="contador-nomes">Nomes: 0</span>
+        <span id="contador-coins">Coins: 0</span>
+    </div>
+
     <div class="container">
         <h1>Maker Coins</h1>
 
@@ -24,17 +46,21 @@
     </div>
 
     <script>
-        // Função para exibir o leaderboard de uma turma selecionada
         function showLeaderboard(className) {
             const leaderboard = document.getElementById('leaderboard');
-            leaderboard.innerHTML = ''; // Limpa os dados anteriores
+            leaderboard.innerHTML = '';
 
-            // Percorre o LocalStorage e exibe os dados da turma selecionada
+            let totalNomes = 0;
+            let totalCoins = 0;
+
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key.startsWith(className)) { // Verifica se a chave começa com o nome da turma
-                    const name = key.split('_')[1]; // Extrai o nome do aluno
-                    const coins = localStorage.getItem(key);
+                if (key.startsWith(className)) {
+                    const name = key.split('_')[1];
+                    const coins = parseInt(localStorage.getItem(key), 10) || 0;
+                    totalNomes++;
+                    totalCoins += coins;
+
                     const userCard = `
                         <div class="user-card">
                             <p class="user-name">${name}</p>
@@ -44,10 +70,14 @@
                     leaderboard.innerHTML += userCard;
                 }
             }
+
+            // Atualizar contador no topo direito
+            document.getElementById('contador-nomes').textContent = `Nomes: ${totalNomes}`;
+            document.getElementById('contador-coins').textContent = `Coins: ${totalCoins}`;
         }
 
-        // Exibir leaderboard de uma turma por padrão (opcional)
-        showLeaderboard('5A'); // Exemplo: Exibir leaderboard da turma 5°A ao carregar a página
+        // Exibir por padrão a turma 5A ao carregar
+        showLeaderboard('5A');
     </script>
 </body>
 
