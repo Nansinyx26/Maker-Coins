@@ -1,252 +1,259 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atualizar Coins - Maker Coin System</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        #sala-info {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            background: #34495e;
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-            color: #ecf0f1;
-            font-size: 1rem;
-            display: flex;
-            gap: 1rem;
-            z-index: 1000;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Atualizar Coins - Maker Coin System</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    #sala-info {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #34495e;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      color: #ecf0f1;
+      font-size: 1rem;
+      display: flex;
+      gap: 1rem;
+      z-index: 1000;
+    }
 
-        #export-button {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            background: #1abc9c;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.2rem;
-            font-size: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            z-index: 1000;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
+    #export-button {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      background: #1abc9c;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      z-index: 1000;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
 
-        #export-button:hover {
-            background: #16a085;
-            transform: scale(1.05);
-        }
+    #export-button:hover {
+      background: #16a085;
+      transform: scale(1.05);
+    }
 
-        #historicoAluno {
-            margin-top: 1.5rem;
-            background: #2c3e50;
-            padding: 1rem;
-            border-radius: 8px;
-            color: #ecf0f1;
-        }
+    #historicoAluno {
+      margin-top: 1.5rem;
+      background: #2c3e50;
+      padding: 1rem;
+      border-radius: 8px;
+      color: #ecf0f1;
+    }
 
-        #historicoAluno h3 {
-            margin-bottom: 0.5rem;
-        }
+    #historicoAluno h3 {
+      margin-bottom: 0.5rem;
+    }
 
-        #historicoAluno ul {
-            list-style: none;
-            padding-left: 0;
-        }
+    #historicoAluno ul {
+      list-style: none;
+      padding-left: 0;
+    }
 
-        #historicoAluno li {
-            margin: 0.3rem 0;
-            padding: 0.3rem;
-            border-bottom: 1px solid #7f8c8d;
-        }
-    </style>
+    #historicoAluno li {
+      margin: 0.3rem 0;
+      padding: 0.3rem;
+      border-bottom: 1px solid #7f8c8d;
+    }
+  </style>
 </head>
 <body>
-    <!-- Contador no topo direito -->
-    <div id="sala-info">
-        <span id="contador-nomes">Nomes: 0</span>
-        <span id="contador-coins">Coins: 0</span>
+  <!-- Contador -->
+  <div id="sala-info">
+    <span id="contador-nomes">Nomes: 0</span>
+    <span id="contador-coins">Coins: 0</span>
+  </div>
+
+  <div class="container">
+    <h1>Atualizar Coins</h1>
+
+    <!-- Seleção da turma -->
+    <div class="tabs">
+      <button class="tab-button" onclick="setClass('5A')">5°A</button>
+      <button class="tab-button" onclick="setClass('5B')">5°B</button>
+      <button class="tab-button" onclick="setClass('5C')">5°C</button>
     </div>
 
-    <div class="container">
-        <h1>Atualizar Coins</h1>
-
-        <!-- Seção para escolher a turma -->
-        <div class="tabs">
-            <button class="tab-button" onclick="setClass('5A')">5°A</button>
-            <button class="tab-button" onclick="setClass('5B')">5°B</button>
-            <button class="tab-button" onclick="setClass('5C')">5°C</button>
-        </div>
-
-        <!-- Seção de entrada para o nome e quantidade de coins -->
-        <div class="input-section">
-            <label for="name">Nome:</label>
-            <input type="text" id="name" placeholder="Digite o nome">
-            <label for="coins">Coins (positivo ou negativo):</label>
-            <input type="number" id="coins" placeholder="Digite a quantidade">
-            <button onclick="saveData()">Salvar</button>
-            <button onclick="window.location.href='frontend.html'">Ver Leaderboard</button>
-        </div>
-
-        <p id="alert" class="alert"></p>
-
-        <!-- Lista de dados salvos -->
-        <h2>Dados Salvos:</h2>
-        <div id="savedData"></div>
-
-        <!-- Barra de pesquisa de histórico -->
-        <div class="input-section">
-            <label for="pesquisa">Pesquisar histórico por nome:</label>
-            <input type="text" id="pesquisa" placeholder="Digite o nome do aluno">
-            <button onclick="mostrarHistorico()">Ver Histórico</button>
-        </div>
-        <div id="historicoAluno"></div>
-
-        <!-- Botão de exportação -->
-        <button id="export-button" onclick="exportToTXT()">Exportar TXT</button>
+    <!-- Formulário -->
+    <div class="input-section">
+      <label for="name">Nome:</label>
+      <input type="text" id="name" placeholder="Digite o nome" />
+      <label for="coins">Coins (positivo ou negativo):</label>
+      <input type="number" id="coins" placeholder="Digite a quantidade" />
+      <button onclick="saveData()">Salvar</button>
+      <button onclick="window.location.href='frontend.html'">Ver Leaderboard</button>
     </div>
 
-    <script>
-        let selectedClass = '';
+    <p id="alert" class="alert"></p>
 
-        function setClass(className) {
-            selectedClass = className;
-            document.getElementById('alert').textContent = `Turma selecionada: ${className}`;
-            displaySavedData();
+    <!-- Lista -->
+    <h2>Dados Salvos:</h2>
+    <div id="savedData"></div>
+
+    <!-- Histórico -->
+    <div class="input-section">
+      <label for="pesquisa">Pesquisar histórico por nome:</label>
+      <input type="text" id="pesquisa" placeholder="Digite o nome do aluno" />
+      <button onclick="mostrarHistorico()">Ver Histórico</button>
+    </div>
+    <div id="historicoAluno"></div>
+
+    <!-- Exportar -->
+    <button id="export-button" onclick="exportToTXT()">Exportar TXT</button>
+  </div>
+
+  <script>
+    let selectedClass = '';
+
+    function removerAcentos(str) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function setClass(className) {
+      selectedClass = className;
+      document.getElementById('alert').textContent = `Turma selecionada: ${className}`;
+      displaySavedData();
+    }
+
+    function saveData() {
+      const nameInput = document.getElementById('name').value.trim();
+      const coins = document.getElementById('coins').value;
+
+      if (nameInput && coins && selectedClass) {
+        const nomeNormalizado = removerAcentos(nameInput).toLowerCase().replace(/\s+/g, ' ').trim();
+        const nomeFormatado = nomeNormalizado.charAt(0).toUpperCase() + nomeNormalizado.slice(1);
+        const key = `${selectedClass}_${nomeNormalizado}`;
+        const historicoKey = `${key}_historico`;
+
+        const valorAtual = parseInt(localStorage.getItem(key)) || 0;
+        const novoValor = valorAtual + parseInt(coins);
+
+        localStorage.setItem(key, novoValor);
+
+        let historico = JSON.parse(localStorage.getItem(historicoKey)) || [];
+        historico.push({
+          data: new Date().toLocaleString(),
+          valor: parseInt(coins)
+        });
+        localStorage.setItem(historicoKey, JSON.stringify(historico));
+
+        alert('Dados salvos!');
+        document.getElementById('name').value = '';
+        document.getElementById('coins').value = '';
+        document.getElementById('alert').textContent = '';
+        displaySavedData();
+      } else {
+        alert('Por favor, preencha todos os campos e selecione uma turma.');
+      }
+    }
+
+    function displaySavedData() {
+      const savedDataContainer = document.getElementById('savedData');
+      savedDataContainer.innerHTML = '';
+
+      let totalNomes = 0;
+      let totalCoins = 0;
+
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith(selectedClass) && !key.includes('_historico')) {
+          const nomeNormalizado = key.split('_')[1];
+          const coins = parseInt(localStorage.getItem(key)) || 0;
+          const nomeFormatado = nomeNormalizado.charAt(0).toUpperCase() + nomeNormalizado.slice(1);
+          totalNomes++;
+          totalCoins += coins;
+
+          const userCard = `
+            <div class="user-card">
+              <p class="user-name">${nomeFormatado}</p>
+              <p class="user-coins">Coins: ${coins}</p>
+              <button onclick="deleteData('${key}')">Excluir</button>
+            </div>
+          `;
+          savedDataContainer.innerHTML += userCard;
         }
+      }
 
-        function saveData() {
-            const nameInput = document.getElementById('name').value.trim();
-            const name = nameInput.charAt(0).toUpperCase() + nameInput.slice(1).toLowerCase();
-            const coins = document.getElementById('coins').value;
+      document.getElementById('contador-nomes').textContent = `Nomes: ${totalNomes}`;
+      document.getElementById('contador-coins').textContent = `Coins: ${totalCoins}`;
+    }
 
-            if (name && coins && selectedClass) {
-                const key = `${selectedClass}_${name}`;
-                const valorAtual = parseInt(localStorage.getItem(key)) || 0;
-                const novoValor = valorAtual + parseInt(coins);
+    function deleteData(key) {
+      if (confirm('Tem certeza que deseja excluir este dado?')) {
+        localStorage.removeItem(key);
+        localStorage.removeItem(`${key}_historico`);
+        alert('Dados excluídos!');
+        displaySavedData();
+      }
+    }
 
-                localStorage.setItem(key, novoValor);
+    function exportToTXT() {
+      if (!selectedClass) {
+        alert("Selecione uma turma antes de exportar.");
+        return;
+      }
 
-                // Histórico
-                const historicoKey = `${selectedClass}_${name}_historico`;
-                let historico = JSON.parse(localStorage.getItem(historicoKey)) || [];
-                historico.push({
-                    data: new Date().toLocaleString(),
-                    valor: parseInt(coins)
-                });
-                localStorage.setItem(historicoKey, JSON.stringify(historico));
+      let txt = "Nome\tCoins\n";
 
-                alert('Dados salvos!');
-                document.getElementById('name').value = '';
-                document.getElementById('coins').value = '';
-                document.getElementById('alert').textContent = '';
-                displaySavedData();
-            } else {
-                alert('Por favor, preencha todos os campos e selecione uma turma.');
-            }
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith(selectedClass) && !key.includes('_historico')) {
+          const nomeNormalizado = key.split('_')[1];
+          const nomeFormatado = nomeNormalizado.charAt(0).toUpperCase() + nomeNormalizado.slice(1);
+          const coins = localStorage.getItem(key);
+          txt += `${nomeFormatado}\t${coins}\n`;
         }
+      }
 
-        function displaySavedData() {
-            const savedDataContainer = document.getElementById('savedData');
-            savedDataContainer.innerHTML = '';
+      const blob = new Blob([txt], { type: "text/plain;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.setAttribute("href", URL.createObjectURL(blob));
+      link.setAttribute("download", `turma_${selectedClass}.txt`);
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 
-            let totalNomes = 0;
-            let totalCoins = 0;
+    function mostrarHistorico() {
+      const nomeInput = document.getElementById('pesquisa').value.trim();
+      const nomeNormalizado = removerAcentos(nomeInput).toLowerCase().replace(/\s+/g, ' ').trim();
+      const nome = nomeNormalizado.charAt(0).toUpperCase() + nomeNormalizado.slice(1);
 
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith(selectedClass) && !key.includes('_historico')) {
-                    const name = key.split('_')[1];
-                    const coins = parseInt(localStorage.getItem(key)) || 0;
-                    totalNomes++;
-                    totalCoins += coins;
+      if (!selectedClass || !nomeNormalizado) {
+        alert('Selecione uma turma e digite o nome.');
+        return;
+      }
 
-                    const userCard = `
-                        <div class="user-card">
-                            <p class="user-name">${name}</p>
-                            <p class="user-coins">Coins: ${coins}</p>
-                            <button onclick="deleteData('${key}')">Excluir</button>
-                        </div>
-                    `;
-                    savedDataContainer.innerHTML += userCard;
-                }
-            }
+      const historicoKey = `${selectedClass}_${nomeNormalizado}_historico`;
+      const historico = JSON.parse(localStorage.getItem(historicoKey)) || [];
 
-            document.getElementById('contador-nomes').textContent = `Nomes: ${totalNomes}`;
-            document.getElementById('contador-coins').textContent = `Coins: ${totalCoins}`;
-        }
+      const container = document.getElementById('historicoAluno');
+      container.innerHTML = `<h3>Histórico de ${nome}</h3>`;
 
-        function deleteData(key) {
-            if (confirm('Tem certeza que deseja excluir este dado?')) {
-                localStorage.removeItem(key);
-                const historicoKey = `${key}_historico`;
-                localStorage.removeItem(historicoKey);
-                alert('Dados excluídos!');
-                displaySavedData();
-            }
-        }
+      if (historico.length === 0) {
+        container.innerHTML += '<p>Nenhum histórico encontrado.</p>';
+        return;
+      }
 
-        function exportToTXT() {
-            if (!selectedClass) {
-                alert("Selecione uma turma antes de exportar.");
-                return;
-            }
+      const lista = document.createElement('ul');
+      historico.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.data} → ${item.valor > 0 ? '+' : ''}${item.valor} coins`;
+        lista.appendChild(li);
+      });
 
-            let txt = "Nome\tCoins\n";
-
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith(selectedClass) && !key.includes('_historico')) {
-                    const name = key.split('_')[1];
-                    const coins = localStorage.getItem(key);
-                    txt += `${name}\t${coins}\n`;
-                }
-            }
-
-            const blob = new Blob([txt], { type: "text/plain;charset=utf-8;" });
-            const link = document.createElement("a");
-            link.setAttribute("href", URL.createObjectURL(blob));
-            link.setAttribute("download", `turma_${selectedClass}.txt`);
-            link.style.display = "none";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function mostrarHistorico() {
-            const nomeInput = document.getElementById('pesquisa').value.trim();
-            const nome = nomeInput.charAt(0).toUpperCase() + nomeInput.slice(1).toLowerCase();
-
-            if (!selectedClass || !nome) {
-                alert('Selecione uma turma e digite o nome.');
-                return;
-            }
-
-            const historicoKey = `${selectedClass}_${nome}_historico`;
-            const historico = JSON.parse(localStorage.getItem(historicoKey)) || [];
-
-            const container = document.getElementById('historicoAluno');
-            container.innerHTML = `<h3>Histórico de ${nome}</h3>`;
-
-            if (historico.length === 0) {
-                container.innerHTML += '<p>Nenhum histórico encontrado.</p>';
-                return;
-            }
-
-            const lista = document.createElement('ul');
-            historico.forEach(item => {
-                const li = document.createElement('li');
-                li.textContent = `${item.data} → ${item.valor > 0 ? '+' : ''}${item.valor} coins`;
-                lista.appendChild(li);
-            });
-
-            container.appendChild(lista);
-        }
-    </script>
+      container.appendChild(lista);
+    }
+  </script>
 </body>
 </html>
