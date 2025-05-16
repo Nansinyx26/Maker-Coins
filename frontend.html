@@ -55,7 +55,9 @@
 
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key.startsWith(className)) {
+
+                // CORREÇÃO: Ignorar históricos
+                if (key.startsWith(className) && !key.includes('_historico')) {
                     const name = key.split('_')[1];
                     const coins = parseInt(localStorage.getItem(key), 10) || 0;
                     totalNomes++;
